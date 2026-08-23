@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "La CLG",
+    "chapels": "Chapelles",
+    "sermons": "Prédications",
+    "testimonies": "Témoignages",
+    "evangelization": "Évangélisation",
+    "books": "Ouvrages",
+    "conventions": "Conventions",
+    "donations": "Dons",
+    "contact": "Contact",
+    "login": "Connexion"
+  },
+  "footer": {
+    "tagline": "Une Église, des chapelles à travers le monde.",
+    "rights": "Tous droits réservés."
+  },
+  "home": {
+    "eyebrow": "1 Timothée 3.15",
+    "title": "L'appui et la colonne de la vérité.",
+    "subtitle": "Avec Jésus, on peut recommencer et faire mieux.",
+    "cta_primary": "Voir les chapelles",
+    "cta_secondary": "Écouter une prédication"
+  },
+  "concepts": {
+    "heading": "Ce que nous portons",
+    "pillar": {
+      "title": "L'appui et la colonne de la vérité",
+      "text": "Le fondement sur lequel la CLG est bâtie, dans chaque chapelle, dans chaque pays."
+    },
+    "restart": {
+      "title": "Avec Jésus on peut recommencer et faire mieux",
+      "text": "Un message d'espérance et de renouveau, porté à travers les prédications, les témoignages et les conventions."
+    }
+  }
+}

@@ -1,26 +1,309 @@
+
 @import "tailwindcss";
 
+/* =========================================================
+   CLG DESIGN TOKENS
+   ========================================================= */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Royal */
+  --color-royal: #1B5FAE;
+  --color-royal-50: #EAF2FB;
+  --color-royal-100: #CFE2F5;
+  --color-royal-300: #7CAEDE;
+  --color-royal-500: #2C74BE;
+  --color-royal-700: #154C8C;
+  --color-royal-900: #0C2C52;
+
+  /* Crimson */
+  --color-crimson: #D6262A;
+  --color-crimson-100: #F8D6D7;
+  --color-crimson-300: #E8767A;
+  --color-crimson-700: #A11B1E;
+
+  /* Gold */
+  --color-gold: #F2B705;
+  --color-gold-100: #FCEEB8;
+  --color-gold-300: #F7D24C;
+  --color-gold-700: #B88900;
+
+  /* Paper */
+  --color-paper: #FFFFFF;
+  --color-paper-light: #FCFCFA;
+  --color-paper-dark: #F1F1EC;
+
+  /* Neutral */
+  --color-charcoal: #1F2430;
+  --color-slate: #5B6472;
+  --color-slate-light: #8A93A0;
 }
+
+/* =========================================================
+   TAILWIND THEME
+   ========================================================= */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-royal: var(--color-royal);
+  --color-royal-50: var(--color-royal-50);
+  --color-royal-100: var(--color-royal-100);
+  --color-royal-300: var(--color-royal-300);
+  --color-royal-500: var(--color-royal-500);
+  --color-royal-700: var(--color-royal-700);
+  --color-royal-900: var(--color-royal-900);
+
+  --color-crimson: var(--color-crimson);
+  --color-crimson-100: var(--color-crimson-100);
+  --color-crimson-300: var(--color-crimson-300);
+  --color-crimson-700: var(--color-crimson-700);
+
+  --color-gold: var(--color-gold);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-700: var(--color-gold-700);
+
+  --color-paper: var(--color-paper);
+  --color-paper-light: var(--color-paper-light);
+  --color-paper-dark: var(--color-paper-dark);
+
+  --color-charcoal: var(--color-charcoal);
+  --color-slate: var(--color-slate);
+  --color-slate-light: var(--color-slate-light);
+
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-work-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =========================================================
+   GLOBAL RESET / RESPONSIVENESS
+   ========================================================= */
+
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+
+  background: var(--color-paper);
+  color: var(--color-charcoal);
+
+  font-family: var(--font-body), system-ui, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Empêche certains éléments longs
+ * de créer accidentellement une largeur
+ * supérieure à celle de l'écran.
+ */
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--color-royal);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--color-crimson);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-gold-100);
+  color: var(--color-royal-900);
+}
+
+/* =========================================================
+   WORLD THREAD
+   ========================================================= */
+
+.world-thread {
+  width: 100%;
+  height: 1px;
+
+  background-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0,
+    currentColor 2px,
+    transparent 2px,
+    transparent 14px
+  );
+
+  background-repeat: repeat-x;
+  background-position: left;
+
+  color: var(--color-gold);
+}
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+
+.marquee-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/*
+ * Animation volontairement lente.
+ */
+@keyframes marquee-once {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.marquee-once {
+  display: inline-block;
+  width: max-content;
+  max-width: none;
+
+  padding-left: 100%;
+
+  animation: marquee-once 24s linear forwards;
+
+  will-change: transform;
+}
+
+/* =========================================================
+   FADE UP
+   ========================================================= */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s ease-out both;
+}
+
+.fade-up-1 {
+  animation-delay: 0.1s;
+}
+
+.fade-up-2 {
+  animation-delay: 0.2s;
+}
+
+.fade-up-3 {
+  animation-delay: 0.3s;
+}
+
+/* =========================================================
+   FADE IN
+   ========================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+/* =========================================================
+   DOT PATTERN
+   ========================================================= */
+
+.bg-dots {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.bg-dots-lg {
+  background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
+  background-size: 34px 34px;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .marquee-once {
+    animation-duration: 20s;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .marquee-once {
+    animation-duration: 22s;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

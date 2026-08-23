@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "The CLG",
+    "chapels": "Chapels",
+    "sermons": "Sermons",
+    "testimonies": "Testimonies",
+    "evangelization": "Evangelization",
+    "books": "Books",
+    "conventions": "Conventions",
+    "donations": "Donations",
+    "contact": "Contact",
+    "login": "Log in"
+  },
+  "footer": {
+    "tagline": "One Church, chapels around the world.",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "eyebrow": "Church of the Living God",
+    "title": "One flame, carried in every chapel around the world.",
+    "subtitle": "Sermons, testimonies, conventions and chapel life across the CLG, gathered in one place.",
+    "cta_primary": "See the chapels",
+    "cta_secondary": "Listen to a sermon"
+  }
+}
