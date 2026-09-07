@@ -4,6 +4,7 @@ import Logo from "./logo"
 import { useState } from "react"
 import AuthCreate1 from "./Auth-create1"
 import AuthCon2 from "./Auth-con2"
+import Entete from "./Entete"
 
 function App() {
 
@@ -18,31 +19,14 @@ function App() {
   }
   return ( 
     <>
-    <div className="w-full max-w-[393px] mx-auto bg-slate-50 min-h-screen text-slate-800 font-sans">
+   <div className="w-full min-h-screen bg-slate-50 text-slate-800 font-sans">
+      <div className="bg-white">
+        <Entete setPage={setPage} />
+      </div>
       
       {/* SECTION HAUTE : FOND BLEU PLUS CLAIR */}
       <section className="bg-gradient-to-b from-blue-600 via-indigo-600 to-blue-800 text-white p-4 rounded-b-3xl shadow-lg">
-        
-        {/* Header */}
-        <header className="flex items-center justify-between py-2 mb-6">
-          <div className="flex items-center gap-2">
-             
-           <Logo></Logo>
-            <span className="font-bold text-base tracking-wide text-white">CLG</span>
-          </div>
-
-          <div className="flex gap-2">
-            <a href="#" className="px-4 py-1.5 text-xs font-medium text-white bg-red-600 border border-white/20 rounded-full hover:bg-red-400 transition-all"
-            onClick={()=> setPage("connexion")}>
-            Connexion
-          </a>
-          <a href="#" className="px-4 py-1.5 text-xs font-medium text-white bg-red-600 border border-white/20 rounded-full hover:bg-red-400 transition-all"
-          onClick={()=> setPage("inscription")}>
-            Inscription 
-          </a>
-          </div>
-        </header>
-
+       
         {/* Bannière d'information */}
         <div className="bg-sky-100 w-full text-indigo-600 font-bold rounded-2xl flex flex-col items-center justify-center p-6 my-4 shadow-inner">
           <h1 className="text-center text-sm font-extrabold tracking-wide">CHURCH OF THE LIVING GOD</h1>

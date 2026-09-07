@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Logo from "./logo";
-
+import Entete from "./Entete";
+import Titre1 from "./titre1";
 export default function AuthCon2() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState([]); // ex: ["Ces identifiants ne correspondent pas."]
@@ -17,36 +18,20 @@ export default function AuthCon2() {
 
     return (
         <>
-            <div className="w-full max-w-[400px] mx-auto bg-[#f4f6f9] text-[#333333] flex flex-col min-h-screen">
+            <div className="w-full mx-auto bg-[#f4f6f9] text-[#333333] flex flex-col min-h-screen">
 
                 {/* NAVBAR (inchangée) */}
-                <nav className="bg-blue-600 font-semibold text-[12px]
-                flex flex-row items-center justify-between shadow-lg p-2 text-[#ffffff]">
-                    <div className="flex gap-1 ">
-                                       <div><Logo></Logo></div>
-                                        <a href="#" className="logo">
-                                           <span className="text-[#ffffff]">Church of the </span>
-                                           <span className="text-red-400 font-bold">Living God</span>
-                                       </a>
-                                      </div>
-                    <ul className="flex list-none gap-[1rem]">
-                        <li><a href="{{ route('home') }}">Accueil</a></li>
-                        <li><a href="#">À propos</a></li>
-                        <li><a href="#">Contacts</a></li>
-                    </ul>
-                </nav>
+               <Entete></Entete>
 
                 {/* MAIN */}
                 <main className="flex flex-1 items-start justify-center pt-[20px] px-[20px] w-full">
-                    <div className="bg-[#ffffff] w-full max-w-[320px] text-center rounded-[12px]
+                    <div className="bg-[#ffffff] w-full min-[900px]:max-w-[800px] max-w-[320px] text-center rounded-[12px]
                     px-6 py-8 shadow-[0_10px_30px_rgba(13,71,161,0.08)] transition-shadow duration-300
                     hover:shadow-[0_15px_35px_rgba(13,71,161,0.12)]">
-
+                    
+                    <Titre1></Titre1>
                         
-                        <h1 className="text-xl mb-6">
-                            <span className="text-blue-800 font-semibold">Church of the </span>
-                            <span className="text-red-400 font-bold">Living God</span>
-                        </h1>
+                        
 
                         {/* FORMULAIRE (repris de connex.blade.php) */}
                         <form onSubmit={handleSubmit} className="text-left">
