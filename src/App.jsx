@@ -5,7 +5,7 @@ import { useState } from "react"
 import AuthCreate1 from "./Auth-create1"
 import AuthCon2 from "./Auth-con2"
 import Entete from "./Entete"
-
+import Footer from "./footer"
 function App() {
 
   const [page,setPage] = useState("acceuil")
@@ -78,6 +78,7 @@ function App() {
 
     </div>
     <PredicationsSection></PredicationsSection>
+    
    </>
   )
 }
