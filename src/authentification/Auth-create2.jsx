@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Logo from "./logo";
+import Logo from "../logo";
 import AuthCreate3 from "./Auth-create3";
-import Entete from "./Entete";
 
 export default function AuthCreate2() {
     const [form, setForm] = useState({ nom: "", prenom: "", dateNais: "", lieuNais: "",sexe: "" });
@@ -76,8 +75,6 @@ export default function AuthCreate2() {
            <div className="w-full mx-auto bg-[#f4f6f9] text-[#333333] flex flex-col min-h-screen">
           
                           {/* NAVBAR (inchangée) */}
-                         <Entete></Entete>
-          
                           {/* MAIN */}
                           <main className="flex flex-1 items-start justify-center pt-[20px] px-[20px] w-full">
                               <div className="bg-[#ffffff] w-full min-[900px]:max-w-[800px] max-w-[320px] text-center rounded-[12px]

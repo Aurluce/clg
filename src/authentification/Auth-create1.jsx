@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Logo from "./logo";
-import AuthCon2 from "./authentification/Auth-con2";
+import Logo from "../logo";
+import AuthCon2 from "./Auth-con2";
 import AuthCreate2 from "./Auth-create2";
-import Titre1 from "./titre1";
+import Titre1 from "../titre1";
 export default function AuthCreate1() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState([]); // ex: ["Ces identifiants ne correspondent pas."]

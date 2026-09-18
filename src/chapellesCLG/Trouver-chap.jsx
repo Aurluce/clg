@@ -1,6 +1,4 @@
 import React from "react";
-import Entete from "./Entete";
-import Footer from "./footer";
 
 // --- Données : remplace par tes vraies églises (venant de ta base si besoin) ---
 const churches = [
@@ -115,7 +113,6 @@ function ChurchCard({ church }) {
 export default function ChurchGrid2() {
   return (
     <>
-    <Entete></Entete>
     <div className="bg-gray-50 min-h-screen p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-[400px] md:max-w-6xl mx-auto">
         {churches.map((church) => (
@@ -123,7 +120,6 @@ export default function ChurchGrid2() {
         ))}
       </div>
     </div>
-    <Footer></Footer>
     </>
   );
 }

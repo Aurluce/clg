@@ -2,10 +2,8 @@ import Compteur from "./compteur"
 import PredicationsSection from "./App-predic"
 import Logo from "./logo"
 import { useState } from "react"
-import AuthCreate1 from "./Auth-create1"
-import AuthCon2 from "./Auth-con2"
-import Entete from "./Entete"
-import Footer from "./footer"
+import AuthCreate1 from "./authentification/Auth-create1"
+import AuthCon2 from "./authentification/Auth-con2"
 function App() {
 
   const [page,setPage] = useState("acceuil")
@@ -16,12 +14,11 @@ function App() {
   } 
   else if(page === "connexion"){
     return (<AuthCon2 />)
-  }
+  } 
   return ( 
     <>
    <div className="w-full min-h-screen bg-slate-50 text-slate-800 font-sans">
       <div className="bg-white">
-        <Entete setPage={setPage} />
       </div>
       
       {/* SECTION HAUTE : FOND BLEU PLUS CLAIR */}

@@ -96,12 +96,12 @@ export default function PredicationsSection() {
   {[
     { label: "Publier Prédication|Témoignage", icon: "🎙️" },
     { label: "Trouver une chapelle|cellule", icon: "⛪" },
-    { label: "Convention", icon: "📅" },
+   
     { label: "Genèse CLG", icon: "📖" },
     { label: "Ouvrages de Ap. Beaudelaire", icon: "📚" },
     { label: "Croisade d'évangélisation", icon: "✝️" },
-    { label: "Chants et cantiques", icon: "🎵" },
-    { label: "Programme CLG", icon: "🗂️" },
+    
+   
     { label: "Dons", icon: "💝" },
     { label: "Contact", icon: "📞" },
   ].map((item, i) => (
@@ -121,7 +121,7 @@ export default function PredicationsSection() {
       <span className="text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110">
         {item.icon}
       </span>
-      <span>{item.label}</span>
+      <span >{item.label}</span>
     </div>
   ))}
 </div>

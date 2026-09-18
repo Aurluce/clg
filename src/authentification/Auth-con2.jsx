@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Logo from "./logo";
-import Entete from "./Entete";
-import Titre1 from "./titre1";
+import Logo from "../logo";
+import Titre1 from "../titre1";
 export default function AuthCon2() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState([]); // ex: ["Ces identifiants ne correspondent pas."]
@@ -21,8 +20,6 @@ export default function AuthCon2() {
             <div className="w-full mx-auto bg-[#f4f6f9] text-[#333333] flex flex-col min-h-screen">
 
                 {/* NAVBAR (inchangée) */}
-               <Entete></Entete>
-
                 {/* MAIN */}
                 <main className="flex flex-1 items-start justify-center pt-[20px] px-[20px] w-full">
                     <div className="bg-[#ffffff] w-full min-[900px]:max-w-[800px] max-w-[320px] text-center rounded-[12px]

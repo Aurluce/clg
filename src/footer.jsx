@@ -1,3 +1,7 @@
+import Logo from "./logo"
+import logoFb from "./assets/logo-fbck.png"
+import logoEmail from "./assets/logo-email.png"
+import logozap from "./assets/logo-ap.png"
 export default function Footer(){
 
 
@@ -8,11 +12,11 @@ export default function Footer(){
             <div className="grid grid-cols-4  ml-3 max-[900px]:hidden">
                 <div className="flex flex-col gap-2">
                    <div className="flex">
-                    <img src="" alt="logo" />
+                    <Logo></Logo>
                     <div className="text-white font-bold"> Church of The  living God</div>
                    </div>
                    <p className="text-xs">Au centre de la perfection des ames dans le monde entier</p>
-                   <img src="" alt="logo social" />
+                   <img src={logoFb} alt="logo social" className="w-7 h-7 rounded-full flex items-center justify-center " />
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -31,16 +35,15 @@ export default function Footer(){
                     <div className="flex flex-col text-xs gap-2">
                         <div className="">Centre d'aide</div>
                     <div className="flex">
-                        <img src="" alt="logo" />
+                        <img src={logoEmail} alt="logo"  width="30px" height="30px"  />
                       <div className="">Email : clg@gmail.com</div>
                      
                     </div>
                      <div className="flex">
-                        <img src="" alt="logo" />
+                        <img src={logozap} alt="logo" width="40px" height="40px"/>
                      <div className="">Tel : +237 683902407</div>
                      </div>
-                       <div className="">Blog</div>
-                       <div className="">Contact</div>
+                       
                     </div>
                 </div>
                  <div className="flex flex-col gap-3">
@@ -75,12 +78,12 @@ export default function Footer(){
                     <div className="flex flex-col text-xs gap-2">
                         <div className="">Centre d'aide</div>
                     <div className="flex">
-                        <img src="" alt="logo" />
+                         <img src={logoEmail} alt="logo"  width="30px" height="30px"  />
                       <div className="">Email : clg@gmail.com</div>
                      
                     </div>
                      <div className="flex">
-                        <img src="" alt="logo" />
+                        <img src={logozap} alt="logo" width="40px" height="40px"/>
                      <div className="">Tel : +237 683902407</div>
                      </div>
                        <div className="">Blog</div>

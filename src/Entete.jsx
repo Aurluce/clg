@@ -31,7 +31,7 @@ const [isOpen,setIsOpen] = useState(0)
             <div>Accueil</div>
             <div>Prédications</div>
             <div>Témoignages</div>
-            <div>Chapelles</div>
+            <a href="#" onClick={() => setPage("Trouver-chap")}>Chapelles</a>
             <div>Conventions</div>
             <div>Dons</div>
             <div>Chant</div>

@@ -1,3 +1,15 @@
 info du footer : adresse mail,
 numero de telephone, contact
 aide67239
+ className="fixed inset-0 bg-[#121633]/50 flex items-center justify-center p-4 z-50"
+          
+
+Je souhaiterai plus tard ajouter d'autres informations tel que 
+l'age, le sexe, region etc... je vouddrais donc que tu mettes
+le tableau dans une zone avec une barre de defilement horizontale
+tel qu'on pourra defiler pour voir plus d'informations. momtre moi 
+et explique les modifications que tu as faites
+
+explique moi comment modifier le code de tel sorte que :
+la premiere colone a pour titre operation et dans chaque ligne de cette colonne il y'a les 
+boutons supprimer et modifier
