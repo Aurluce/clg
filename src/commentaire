@@ -13,3 +13,14 @@ et explique les modifications que tu as faites
 explique moi comment modifier le code de tel sorte que :
 la premiere colone a pour titre operation et dans chaque ligne de cette colonne il y'a les 
 boutons supprimer et modifier
+
+
+remplace le bouton modifier par valider
+juste apres la colonne numero, ajoute la colonne statut donc les champs peuvent etre: publier, en attente,supprimer,
+pour le moment ne cree aucune logique metier sur ces boutons 
+
+Exercice 1 Générer un contrôleur ressource ClientController lié au modèle Client avec l'option --resource--model, puis implémenter les méthodes index et show en retournant des réponses JSON. Page 8 Exercices Backend Laravel — Notions essentielles Exercice 2 Créer un contrôleur invocable GenererRapportVentesController qui calcule le total des ventes du mois en cours et retourne le résultat en JSON. Le brancher sur la route GET /rapports/ventes. Exercice 3 Refactoriser un contrôleur CommandeController dont la méthode store contient plus de 30 lignes de logique métier : extraire cette logique dans une classe CommandeService injectée dans le contrôleur via le constructeur. Exercice 4 Écrire un contrôleur ExportClientsController dont la méthode __invoke retourne un fichier CSV téléchargeable listant tous les clients (nom, email, date d'inscription). Exercice 5 Créer un contrôleur AuthController avec les méthodes login et logout, en gérant les cas d'échec d'authentification avec des réponses JSON 401 explicites. Exercice 6 Créer un contrôleur d'API StatistiquesController exposant un tableau de bord agrégé (nombre total de produits, chiffre d'affaires du mois, top 3 des produits vendus) en une seule méthode. Exercice 7 Mettre en place la pagination personnalisée d'un contrôleur avec un nombre d'éléments par page paramétrable via un paramètre de requête per_page, borné entre 5 et 100. Exercice 8 Ajouter la gestion du tri dynamique sur un endpoint index via un paramètre sort (ex. ?sort=-prix pour un tri décroissant), en validant les colonnes autorisées pour éviter une injection SQL        genere un fichier pdf avec la correction de tous ces exercices(explique en detail les bouts de codes et ce qu'il y'a lieu a faire) commence par les codes de migrations, de modeles et factories, seesders... et front end pour faire des tests, commande aussi pour tester en ligne de commande
+
+
+comment modifier le code lorsque apres un clique sur un champs temoignage,
+le temoignage s'affiche dans un menu contextuelle comme ceci className="fixed inset-0 bg-[#121633]/50 flex items-center justify-center p-4 z-50"

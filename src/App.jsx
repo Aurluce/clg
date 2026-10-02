@@ -4,6 +4,8 @@ import Logo from "./logo"
 import { useState } from "react"
 import AuthCreate1 from "./authentification/Auth-create1"
 import AuthCon2 from "./authentification/Auth-con2"
+import MenuCardsGrid from "./MenuCardsGrid"
+import Slider from "./Slider"
 function App() {
 
   const [page,setPage] = useState("acceuil")
@@ -17,7 +19,7 @@ function App() {
   } 
   return ( 
     <>
-   <div className="w-full min-h-screen bg-slate-50 text-slate-800 font-sans">
+   <div className="w-full  min-h-screen bg-slate-50 text-slate-800 font-sans">
       <div className="bg-white">
       </div>
       
@@ -65,16 +67,23 @@ function App() {
       {/* SECTION DU BAS */}
       <div className=" p-8">
         <div className="font-bold text-xl text-indigo-600">Fil d'actualite</div>
-        <div>
+       <div className="md:flex justify-between">
+         <div>
           Croisades, retraite spirituelle, sujets de priere et annonce 
         </div>
+          <div className="p-6">
+        <Slider />
+      </div>
+       </div>
 
 
       </div>
-      
+     
 
     </div>
     <PredicationsSection></PredicationsSection>
+    <MenuCardsGrid></MenuCardsGrid>
+    
     
    </>
   )

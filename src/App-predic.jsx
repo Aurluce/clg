@@ -1,3 +1,5 @@
+
+
 export default function PredicationsSection() {
   const items = [
     {
@@ -24,7 +26,7 @@ export default function PredicationsSection() {
   ];
 
   return (
-    <section className="w-full min-h-screen bg-[#F3F5FA] px-4 py-6 font-sans sm:px-6 lg:px-12">
+    <section className="w-full  bg-[#F3F5FA] px-4 py-6 font-sans sm:px-6 lg:px-12">
       
       {/* Grand Titre */}
       <h2 className="font-serif text-[28px] font-semibold text-indigo-600 leading-snug tracking-tight mb-3">
@@ -92,39 +94,7 @@ export default function PredicationsSection() {
         
       </div>
       </div>
-     <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-6xl mx-auto">
-  {[
-    { label: "Publier Prédication|Témoignage", icon: "🎙️" },
-    { label: "Trouver une chapelle|cellule", icon: "⛪" },
-   
-    { label: "Genèse CLG", icon: "📖" },
-    { label: "Ouvrages de Ap. Beaudelaire", icon: "📚" },
-    { label: "Croisade d'évangélisation", icon: "✝️" },
-    
-   
-    { label: "Dons", icon: "💝" },
-    { label: "Contact", icon: "📞" },
-  ].map((item, i) => (
-    <div
-      key={i}
-      className="group flex flex-col items-center justify-center gap-2 text-center
-                 bg-gradient-to-br from-sky-100 to-sky-200
-                 hover:from-blue-600 hover:to-indigo-600
-                 text-blue-700 hover:text-white
-                 font-semibold text-[13px] sm:text-sm
-                 p-4 sm:p-5
-                 rounded-2xl border border-sky-300/50
-                 shadow-sm hover:shadow-lg hover:shadow-blue-300/40
-                 transition-all duration-300 ease-out
-                 hover:-translate-y-1 cursor-pointer"
-    >
-      <span className="text-2xl sm:text-3xl transition-transform duration-300 group-hover:scale-110">
-        {item.icon}
-      </span>
-      <span >{item.label}</span>
-    </div>
-  ))}
-</div>
+ 
       
 
     </section>
