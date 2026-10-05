@@ -21,10 +21,13 @@ import PredicationDashboard from './predication/PredicationDashboard.jsx'
 import TemPredic from './Temoignage/tem-predic.jsx'
 import TemoignagesPage from './Temoignage/TemoignagesPage.jsx'
 import MyTestimony from './Temoignage/FormTem2.jsx'
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+   <BrowserRouter>
     <App />
+    </BrowserRouter>
    
     <Footer />
   

@@ -13,11 +13,10 @@ const [isOpen,setIsOpen] = useState(0)
             <span className="font-bold text-base tracking-wide text-indigo-600">CLG</span>
           </div>
           <div className="flex gap-2">
-            <a href="#" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white" onClick={() => setPage("connexion")}>
+            <a href="#" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white" >
               Connexion
             </a>
-            <a href="#" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white" onClick={() => setPage("inscription")}>
-              Inscription
+            <a href="#" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white" >
             </a>
             <button onClick={()=>setIsOpen(!isOpen) }
             className="min-[900px]:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5" aria-label="Menu">
@@ -56,11 +55,11 @@ const [isOpen,setIsOpen] = useState(0)
             <div>Livre</div>
              <div className="flex gap-2">
             <a href="#" className="px-4 py-1.5 text-xs font-medium text-white bg-red-600 border border-white/20 rounded-full hover:bg-red-400 transition-all"
-            onClick={()=> setPage("connexion")}>
+            >
             Connexion
           </a>
           <a href="#" className="px-4 py-1.5 text-xs font-medium text-white bg-red-600 border border-white/20 rounded-full hover:bg-red-400 transition-all"
-          onClick={()=> setPage("inscription")}>
+         >
             Inscription 
           </a>
           </div>
