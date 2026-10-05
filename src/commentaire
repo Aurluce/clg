@@ -24,3 +24,5 @@ Exercice 1 Générer un contrôleur ressource ClientController lié au modèle C
 
 comment modifier le code lorsque apres un clique sur un champs temoignage,
 le temoignage s'affiche dans un menu contextuelle comme ceci className="fixed inset-0 bg-[#121633]/50 flex items-center justify-center p-4 z-50"
+
+<Route path="" element={< />} />

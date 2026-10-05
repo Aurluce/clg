@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // --- Données : remplace par tes vraies églises (venant de ta base si besoin) ---
 const churches = [
@@ -13,6 +14,7 @@ const churches = [
     ],
     icon: "✝️",
     bandeau: "from-blue-100 to-blue-300",
+    lien: "BafoussamChapelle",
   },
   {
     id: 2,
@@ -26,6 +28,7 @@ const churches = [
     ],
     icon: "✝️",
     bandeau: "from-purple-100 to-purple-300",
+    lien: "BafoussamChapelle",
   },
   {
     id: 3,
@@ -39,6 +42,7 @@ const churches = [
     ],
     icon: "✝️",
     bandeau: "from-emerald-100 to-emerald-300",
+    lien: "BafoussamChapelle",
   },
      {
     id: 4,
@@ -52,6 +56,7 @@ const churches = [
     ],
     icon: "✝️",
     bandeau: "from-emerald-100 to-emerald-300",
+    lien: "BafoussamChapelle",
   },
 ];
 
@@ -116,7 +121,9 @@ export default function ChurchGrid2() {
     <div className="bg-gray-50 min-h-screen p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-[400px] md:max-w-6xl mx-auto">
         {churches.map((church) => (
-          <ChurchCard key={church.id} church={church} />
+          <Link key={church.id} to={`/${church.lien}`}>
+            <ChurchCard church={church} />
+          </Link>
         ))}
       </div>
     </div>

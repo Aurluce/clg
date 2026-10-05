@@ -22,10 +22,13 @@ import TemPredic from './Temoignage/tem-predic.jsx'
 import TemoignagesPage from './Temoignage/TemoignagesPage.jsx'
 import MyTestimony from './Temoignage/FormTem2.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import VoirTem from './Temoignage/voir-tem.jsx'
+import Acceuil from './Acceuil.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
    <BrowserRouter>
+   <Entete></Entete>
     <App />
     </BrowserRouter>
    

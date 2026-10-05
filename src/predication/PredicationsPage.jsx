@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const PREDICATIONS = [
   {
     id: 1,
@@ -80,10 +82,10 @@ export default function PredicationsPage() {
           Les enseignements publiés en texte, audio ou vidéo. Touchez un titre pour lire ou écouter le message complet.
         </p>
       </div>
-      <a href="#" className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
+      <Link to="formPredication" className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
        flex items-center text-center  text-xs font-medium text-white" onClick={() => setPage("inscription")}>
               Enregistrer une predication 
-            </a>
+            </Link>
       </div>
 
       {/* Grille des prédications */}
@@ -114,10 +116,13 @@ export default function PredicationsPage() {
             <p className="font-serif text-[15px] font-semibold text-[#121633] leading-tight">
               {item.title}
             </p>
-
+            <div className="flex justify-between">
             <p className="text-[#68708C] text-[11px] font-normal">
               {item.subtitle} · {item.date}
             </p>
+    <Route path="voirPredication" element={<VoirPredic />} />
+            <Link to="/voirPredication" className="bg-blue-600 text-white p-3 rounded">Voir</Link>
+            </div>
           </div>
         ))}
       </div>

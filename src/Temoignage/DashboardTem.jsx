@@ -268,7 +268,7 @@ function SaveButton({ onClick }) {
 /*  Composant principal                                                */
 /* ------------------------------------------------------------------ */
 
-export default function RecruiterDashboard() {
+export default function DashboardTem() {
   const handleAdd = () => {
     // À brancher plus tard sur la route Laravel de suppression
     console.log("Suppression demandée");

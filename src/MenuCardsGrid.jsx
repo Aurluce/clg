@@ -1,5 +1,6 @@
 import React from "react";
 import img1 from "./assets/convention-2023.jpg"
+import { Link } from "react-router-dom";
 /* ------------------------------------------------------------------ */
 /*  DONNÉES — un élément par carte du menu.                            */
 /*  "image" : chemin vers la vraie photo (à déposer dans public/       */
@@ -11,10 +12,19 @@ import img1 from "./assets/convention-2023.jpg"
 const menuItems = [
   {
     id: "predication",
-    label: "Publier Prédication|Témoignage",
+    label: "Publier Prédication",
     icon: "🎙️",
     gradient: "linear-gradient(160deg, #e0f2fe, #7dd3fc)",
     image: img1,
+    lien: "formPredication",
+  },
+  {
+    id: "temoignage",
+    label: "Publier Témoignage",
+    icon: "🎙️",
+    gradient: "linear-gradient(160deg, #e0f2fe, #7dd3fc)",
+    image: img1,
+    lien: "formTemoignage",
   },
   {
     id: "chapelle",
@@ -22,6 +32,7 @@ const menuItems = [
     icon: "⛪",
     gradient: "linear-gradient(160deg, #fef3c7, #fcd34d)",
     image: img1,
+    lien: "eglisesCLG"
   },
   {
     id: "genese",
@@ -29,6 +40,7 @@ const menuItems = [
     icon: "📖",
     gradient: "linear-gradient(160deg, #dcfce7, #86efac)",
     image: img1,
+    lien: "Aucun",
   },
   {
     id: "ouvrages",
@@ -36,6 +48,7 @@ const menuItems = [
     icon: "📚",
     gradient: "linear-gradient(160deg, #fae8ff, #f0abfc)",
     image: img1,
+    lien: "Aucun",
   },
   {
     id: "croisade",
@@ -43,6 +56,7 @@ const menuItems = [
     icon: "✝️",
     gradient: "linear-gradient(160deg, #ede9fe, #c4b5fd)",
     image:img1,
+    lien: "Aucun",
   },
   {
     id: "dons",
@@ -50,13 +64,15 @@ const menuItems = [
     icon: "💝",
     gradient: "linear-gradient(160deg, #ffe4e6, #fda4af)",
     image: img1,
+    lien: "Aucun",
   },
   {
     id: "contact",
     label: "Contact",
     icon: "📞",
     gradient: "linear-gradient(160deg, #fee2e2, #fca5a5)",
-    image: img1
+    image: img1,
+    lien: "Aucun",
   },
 ];
 
@@ -117,7 +133,9 @@ export default function MenuCardsGrid() {
 
       <div className="max-w-[1100px] mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {menuItems.map((item) => (
-          <MenuCard key={item.id} item={item} onSelect={handleSelect} />
+          <Link to={item.lien}>
+            <MenuCard key={item.id} item={item} onSelect={handleSelect} />
+          </Link>
         ))}
       </div>
     </div>

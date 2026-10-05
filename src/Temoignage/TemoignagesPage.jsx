@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import MyTestimony from "./FormTem2";
 import { useState } from "react";
 const TEMOIGNAGES = [
@@ -79,11 +80,11 @@ export default function TemoignagesPage() {
           Des vies transformées, racontées par ceux qui les ont vécues. Touchez un titre pour lire le témoignage complet.
         </p>
       </div>
-       <button className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
+       <Link to="formTemoignage"  className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
        flex items-center text-center  text-xs font-medium text-white" onClick={() => setOpen(true)}>
               Enregistrer votre temoignage 
-            </button>
-            <MyTestimony open={open} onClose={()=>setOpen(false)} />
+            </Link>
+           
       </div>
 
       {/* Grille des témoignages */}
@@ -115,9 +116,12 @@ export default function TemoignagesPage() {
               {item.title}
             </p>
 
-            <p className="text-[#68708C] text-[11px] font-normal">
+            <div className="flex justify-between">
+              <p className="text-[#68708C] text-[11px] font-normal">
               {item.subtitle} · {item.date}
             </p>
+            <Link to="/voir-tem" className="bg-blue-600 text-white p-3 rounded">Voir</Link>
+            </div>
           </div>
         ))}
       </div>

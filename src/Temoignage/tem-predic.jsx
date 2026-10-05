@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const TEMOIGNAGES = [
   {
     id: 1,
@@ -8,6 +10,7 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#B02636]",
     content:
       "Après six années marquées par la maladie, Sœur Delphine raconte comment sa foi a été le socle de sa persévérance, et comment sa guérison a renforcé la communauté qui priait avec elle chaque semaine.",
+    lien: "voir-tem",
   },
   {
     id: 2,
@@ -18,6 +21,7 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#233385]",
     content:
       "Frère Armand revient sur la période difficile qui a suivi la perte de son emploi, et sur la manière dont sa communauté d'église l'a soutenu jusqu'à ce qu'une nouvelle opportunité se présente.",
+    lien: "voir-tem",
   },
   {
     id: 3,
@@ -28,7 +32,8 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#B02636]",
     content:
       "Après des années de silence avec sa sœur, Christelle partage le cheminement de prière et de pardon qui a permis à leur relation de se reconstruire.",
-  },
+    lien: "voir-tem",
+    },
   {
     id: 4,
     tag: "TÉMOIGNAGE · AUDIO",
@@ -38,7 +43,8 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#233385]",
     content:
       "Ismaël raconte son parcours de délivrance, les rechutes, et l'accompagnement d'un groupe de prière qui ne l'a jamais laissé seul face à sa dépendance.",
-  },
+    lien: "voir-tem",
+    },
   {
     id: 5,
     tag: "TÉMOIGNAGE · VIDÉO",
@@ -48,7 +54,8 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#B02636]",
     content:
       "Le couple Nguemo témoigne des mois de tension qui ont précédé leur décision de prier ensemble chaque soir, et de la transformation progressive de leur foyer.",
-  },
+    lien: "voir-tem",
+    },
   {
     id: 6,
     tag: "TÉMOIGNAGE · TEXTE",
@@ -58,7 +65,8 @@ const TEMOIGNAGES = [
     bgColor: "bg-[#233385]",
     content:
       "Judicaël partage comment, après un premier échec, il a repris ses études avec le soutien de sa cellule de prière et obtenu son diplôme cette année.",
-  },
+    lien: "voir-tem",
+    },
 ];
 
 export default function TemPredic() {
@@ -96,9 +104,12 @@ export default function TemPredic() {
               {item.title}
             </p>
 
-            <p className="text-[#68708C] text-[11px] font-normal">
+            <div className="flex justify-between">
+              <p className="text-[#68708C] text-[11px] font-normal">
               {item.subtitle} · {item.date}
             </p>
+            <Link to={item.lien} key={item.id} className="bg-blue-600 text-white p-3 rounded">Voir</Link>
+            </div>
           </div>
         ))}
       </div>

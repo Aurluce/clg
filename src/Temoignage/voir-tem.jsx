@@ -1,4 +1,4 @@
- import vid1 from "./assets/vid1.mp4"
+ import vid1 from "../assets/vid1.mp4"
  import PredicTem from '../predication/predic-tem.jsx'
  import TemPredic from "./tem-predic.jsx";
 
