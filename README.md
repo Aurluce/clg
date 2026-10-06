@@ -1,5 +1,25 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## API et backend Django
+
+Les appels HTTP sont centralisés dans [lib/api.ts](lib/api.ts) : gestion des erreurs, envoi JSON ou multipart, types de payloads et méthodes par domaine. Les formulaires de connexion, inscription, contact, convention, témoignage et don utilisent cette couche.
+
+Copier `.env.example` vers `.env.local` et renseigner `NEXT_PUBLIC_API_BASE_URL` avec l’URL racine du backend (sans slash final), par exemple `http://localhost:8000`. Cette variable ne doit contenir aucun secret.
+
+Contrats attendus côté backend :
+
+| Fonction | Méthode / endpoint | Corps / réponse principale |
+| --- | --- | --- |
+| Connexion JWT | `POST /api/auth/token/` | `{ email, password }` → `{ access, refresh?, user? }` |
+| Création de compte | `POST /api/auth/register/` | `fullName, email, phone, country, city, churchStatus, chapelSlug?, password` |
+| Contact | `POST /api/contact/` | `{ name, email, subject, message }` |
+| Inscription convention | `POST /api/conventions/{slug}/register/` | `{ name, chapel, phone, attendees }` |
+| Témoignage | `POST /api/testimonies/` | multipart : `name`, `chapel`, `format`, `content` ou `file` |
+| Don | `POST /api/donations/` | `{ amount, currency: "XAF" }` → `{ paymentUrl?, message? }` |
+| Contenus | `GET /api/chapels/`, `/api/sermons/`, `/api/testimonies/`, `/api/conventions/`, `/api/books/`, `/api/campaigns/` | listes typées ; chorales via `/api/conventions/{slug}/choir-songs/` |
+
+Ces routes sont des contrats à implémenter côté Django. Les pages de contenu utilisent encore les données de démonstration de `lib/mock/content.ts`. Configurer CORS si le frontend et le backend ont des origines différentes. En production, privilégier des cookies `HttpOnly`, `Secure`, `SameSite` gérés par le backend ; aucun jeton n’est persisté dans `localStorage`.
+
 ## Getting Started
 
 First, run the development server:

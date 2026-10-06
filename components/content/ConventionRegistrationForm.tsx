@@ -1,15 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClassName } from "@/components/ui/Field";
+import { api } from "@/lib/api";
 
-export function ConventionRegistrationForm() {
+export function ConventionRegistrationForm({ conventionSlug }: { conventionSlug: string }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setFeedback(null);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    try {
+      await api.conventions.register(conventionSlug, {
+        name: String(formData.get("name")),
+        chapel: String(formData.get("chapel")),
+        phone: String(formData.get("phone")),
+        attendees: Number(formData.get("attendees")),
+      });
+      setFeedback({ kind: "success", message: "Votre inscription a bien été enregistrée." });
+      form.reset();
+    } catch (error) {
+      setFeedback({
+        kind: "error",
+        message: error instanceof Error ? error.message : "L’inscription a échoué.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        alert("Inscription à connecter à l'API (POST /api/conventions/:slug/register).");
-      }}
+      onSubmit={handleSubmit}
       className="rounded-xl border border-royal-100 bg-paper-light p-7 shadow-sm md:p-9"
     >
       <h2 className="font-display text-xl font-semibold text-royal">
@@ -46,10 +74,16 @@ export function ConventionRegistrationForm() {
         </Field>
       </div>
 
-      <Button type="submit" variant="primary" className="mt-8 w-full sm:w-auto">
-        Confirmer mon inscription
+      <Button type="submit" variant="primary" disabled={isSubmitting} className="mt-8 w-full sm:w-auto">
+        {isSubmitting ? "Envoi…" : "Confirmer mon inscription"}
         <span aria-hidden="true">→</span>
       </Button>
+
+      {feedback && (
+        <p role="status" aria-live="polite" className={`mt-4 text-sm ${feedback.kind === "error" ? "text-crimson" : "text-green-700"}`}>
+          {feedback.message}
+        </p>
+      )}
 
       <p className="mt-4 font-mono text-xs leading-relaxed text-slate-light">
         Vous recevrez une confirmation par SMS une fois votre inscription validée.

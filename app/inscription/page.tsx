@@ -8,6 +8,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { chapels } from "@/lib/mock/content";
+import { api } from "@/lib/api";
 
 const churchStatuses = [
   {
@@ -79,6 +80,8 @@ export default function RegisterPage() {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
 
   const passwordsMatch =
     confirmPassword.length === 0 || password === confirmPassword;
@@ -108,7 +111,7 @@ export default function RegisterPage() {
           ========================================================= */}
           <div className="mb-10 text-center">
             <p className="mx-auto max-w-2xl font-body text-sm leading-6 text-slate sm:text-base">
-              Créez votre compte pour rejoindre l'espace numérique de la
+              Créez votre compte pour rejoindre l&apos;espace numérique de la
               Church of the Living God et être rattaché à votre chapelle.
             </p>
           </div>
@@ -159,14 +162,39 @@ export default function RegisterPage() {
 
             <form
               className="p-5 sm:p-8"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-
                 if (!canSubmit) return;
-
-                alert(
-                  "Formulaire à connecter à l'API Django (POST /api/auth/register)."
-                );
+                setIsSubmitting(true);
+                setFeedback(null);
+                const form = e.currentTarget;
+                const formData = new FormData(form);
+                try {
+                  await api.auth.register({
+                    fullName: String(formData.get("fullName")),
+                    email: String(formData.get("email")),
+                    phone: String(formData.get("phone")),
+                    country: String(formData.get("country")),
+                    city: String(formData.get("city")),
+                    churchStatus: String(formData.get("churchStatus")),
+                    chapelSlug: String(formData.get("chapel") || "") || undefined,
+                    password: String(formData.get("password")),
+                  });
+                  setFeedback({ kind: "success", message: "Votre compte a bien été créé. Vous pouvez maintenant vous connecter." });
+                  form.reset();
+                  setPassword("");
+                  setConfirmPassword("");
+                  setSelectedCountry("");
+                  setSelectedStatus("");
+                  setAcceptedTerms(false);
+                } catch (error) {
+                  setFeedback({
+                    kind: "error",
+                    message: error instanceof Error ? error.message : "La création du compte a échoué.",
+                  });
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
             >
               {/* =======================================================
@@ -179,7 +207,7 @@ export default function RegisterPage() {
                   </h3>
 
                   <p className="mt-1 text-sm text-slate">
-                    Ces informations permettront d'identifier votre compte
+                    Ces informations permettront d&apos;identifier votre compte
                     dans la communauté CLG.
                   </p>
                 </div>
@@ -311,7 +339,7 @@ export default function RegisterPage() {
                   </h3>
 
                   <p className="mt-1 text-sm leading-5 text-slate">
-                    Indiquez votre situation actuelle au sein de l'Église.
+                    Indiquez votre situation actuelle au sein de l&apos;Église.
                   </p>
                 </div>
 
@@ -322,7 +350,7 @@ export default function RegisterPage() {
                       htmlFor="churchStatus"
                       className="font-body text-sm font-medium text-charcoal"
                     >
-                      Fonction / statut dans l'Église
+                      Fonction / statut dans l&apos;Église
                       <span className="ml-1 text-crimson">*</span>
                     </label>
 
@@ -352,7 +380,7 @@ export default function RegisterPage() {
 
                     <p className="mt-2 text-xs leading-5 text-slate">
                       Le statut déclaré pourra être vérifié par
-                      l'administration de la CLG.
+                      l&apos;administration de la CLG.
                     </p>
                   </div>
 
@@ -405,7 +433,7 @@ export default function RegisterPage() {
                       <p className="text-xs leading-5 text-charcoal">
                         Vous avez sélectionné le statut{" "}
                         <strong>Pasteur</strong>. Ce statut devra être
-                        confirmé par l'administration avant l'attribution
+                        confirmé par l&apos;administration avant l&apos;attribution
                         des privilèges d'administrateur.
                       </p>
                     </div>
@@ -570,7 +598,7 @@ export default function RegisterPage() {
                   />
 
                   <span className="text-xs leading-5 text-slate">
-                    J'accepte les conditions d'utilisation et la
+                    J&apos;accepte les conditions d&apos;utilisation et la
                     politique de confidentialité de la plateforme CLG.
                     <span className="ml-1 text-crimson">*</span>
                   </span>
@@ -589,10 +617,10 @@ export default function RegisterPage() {
                 </span>
 
                 <p className="text-xs leading-5 text-slate">
-                  Après l'inscription, votre compte sera créé avec les
+                  Après l&apos;inscription, votre compte sera créé avec les
                   permissions correspondant à votre situation. Les
                   privilèges administratifs ne sont pas attribués
-                  automatiquement lors de l'inscription.
+                  automatiquement lors de l&apos;inscription.
                 </p>
               </div>
 
@@ -603,12 +631,18 @@ export default function RegisterPage() {
                 <Button
                   type="submit"
                   variant="primary"
-                  disabled={!canSubmit}
+                  disabled={!canSubmit || isSubmitting}
                   className="w-full py-3.5 text-sm font-semibold sm:w-auto sm:min-w-56"
                 >
-                  Créer mon compte
+                  {isSubmitting ? "Création…" : "Créer mon compte"}
                 </Button>
               </div>
+
+              {feedback && (
+                <p role="status" aria-live="polite" className={`mt-4 text-sm ${feedback.kind === "error" ? "text-crimson" : "text-green-700"}`}>
+                  {feedback.message}
+                </p>
+              )}
 
               {/* Login */}
               <div className="mt-6 border-t border-royal-100 pt-6 text-center">

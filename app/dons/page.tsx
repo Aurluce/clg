@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClassName } from "@/components/ui/Field";
 import { cn } from "@/lib/utils/cn";
+import { api } from "@/lib/api";
 
 const amounts = [5000, 10000, 25000, 50000];
 
@@ -28,6 +29,8 @@ const impacts = [
 export default function DonationsPage() {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(10000);
   const [customAmount, setCustomAmount] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
 
   const effectiveAmount = customAmount ? Number(customAmount) : selectedAmount;
 
@@ -83,11 +86,34 @@ export default function DonationsPage() {
           {/* Carte de don */}
           <div className="lg:sticky lg:top-28 lg:self-start">
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                alert(
-                  `Don de ${effectiveAmount?.toLocaleString("fr-FR") ?? 0} FCFA — paiement à brancher (Mobile Money, carte bancaire...).`
-                );
+                if (!effectiveAmount || effectiveAmount < 500) {
+                  setFeedback({ kind: "error", message: "Le montant minimum est de 500 FCFA." });
+                  return;
+                }
+
+                setIsSubmitting(true);
+                setFeedback(null);
+                try {
+                  const result = await api.donations.create({ amount: effectiveAmount, currency: "XAF" });
+                  if (result.paymentUrl) {
+                    const paymentUrl = new URL(result.paymentUrl);
+                    if (paymentUrl.protocol !== "https:" && paymentUrl.protocol !== "http:") {
+                      throw new Error("Le lien de paiement retourné est invalide.");
+                    }
+                    window.location.assign(paymentUrl.toString());
+                    return;
+                  }
+                  setFeedback({ kind: "success", message: result.message ?? "Votre demande de don a été enregistrée." });
+                } catch (error) {
+                  setFeedback({
+                    kind: "error",
+                    message: error instanceof Error ? error.message : "La demande de don a échoué.",
+                  });
+                } finally {
+                  setIsSubmitting(false);
+                }
               }}
               className="relative overflow-hidden rounded-xl border border-royal-100 bg-paper-light p-7 shadow-md md:p-9"
             >
@@ -158,14 +184,19 @@ export default function DonationsPage() {
                 </span>
               </div>
 
-              <Button type="submit" variant="primary" className="mt-6 w-full">
-                Faire un don
+              <Button type="submit" variant="primary" disabled={isSubmitting} className="mt-6 w-full">
+                {isSubmitting ? "Préparation du paiement…" : "Faire un don"}
                 <span aria-hidden="true">→</span>
               </Button>
 
+              {feedback && (
+                <p role="status" aria-live="polite" className={`mt-4 text-sm ${feedback.kind === "error" ? "text-crimson" : "text-green-700"}`}>
+                  {feedback.message}
+                </p>
+              )}
+
               <p className="mt-4 font-mono text-xs leading-relaxed text-slate-light">
-                Le moyen de paiement (Mobile Money, carte bancaire...) sera branché une fois le
-                prestataire choisi avec l'Église.
+                Le paiement sécurisé sera initialisé par le backend et son prestataire de paiement.
               </p>
             </form>
           </div>

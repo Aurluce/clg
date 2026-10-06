@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClassName } from "@/components/ui/Field";
 import { cn } from "@/lib/utils/cn";
+import { api } from "@/lib/api";
 
 const formats = [
   {
@@ -34,6 +35,8 @@ const formats = [
 
 export default function NewTestimonyPage() {
   const [format, setFormat] = useState<(typeof formats)[number]["value"]>("texte");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
 
   return (
     <>
@@ -45,9 +48,26 @@ export default function NewTestimonyPage() {
 
       <Section>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            alert("Formulaire à connecter à l'API (POST /api/testimonies).");
+            setIsSubmitting(true);
+            setFeedback(null);
+            const form = e.currentTarget;
+            const payload = new FormData(form);
+            payload.set("format", format);
+            try {
+              await api.testimonies.create(payload);
+              setFeedback({ kind: "success", message: "Votre témoignage a été envoyé pour validation." });
+              form.reset();
+              setFormat("texte");
+            } catch (error) {
+              setFeedback({
+                kind: "error",
+                message: error instanceof Error ? error.message : "L’envoi du témoignage a échoué.",
+              });
+            } finally {
+              setIsSubmitting(false);
+            }
           }}
           className="mx-auto max-w-2xl rounded-xl border border-royal-100 bg-paper-light p-7 shadow-sm md:p-10"
         >
@@ -180,10 +200,16 @@ export default function NewTestimonyPage() {
             </div>
           )}
 
-          <Button type="submit" variant="primary" className="mt-8 w-full sm:w-auto">
-            Envoyer mon témoignage
+          <Button type="submit" variant="primary" disabled={isSubmitting} className="mt-8 w-full sm:w-auto">
+            {isSubmitting ? "Envoi…" : "Envoyer mon témoignage"}
             <span aria-hidden="true">→</span>
           </Button>
+
+          {feedback && (
+            <p role="status" aria-live="polite" className={`mt-4 text-sm ${feedback.kind === "error" ? "text-crimson" : "text-green-700"}`}>
+              {feedback.message}
+            </p>
+          )}
 
           <p className="mt-4 font-mono text-xs leading-relaxed text-slate-light">
             Votre témoignage sera relu par le pasteur de votre chapelle avant publication.

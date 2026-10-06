@@ -24,7 +24,7 @@ export default async function ConventionRegistrationPage({
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
           {/* Formulaire (composant client) */}
-          <ConventionRegistrationForm />
+          <ConventionRegistrationForm conventionSlug={slug} />
 
           {/* Récapitulatif de l'événement */}
           <aside className="lg:sticky lg:top-28 lg:self-start">

@@ -1,14 +1,15 @@
-
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Dictionary } from "@/i18n/config";
 
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { api } from "@/lib/api";
+import type { AuthUser } from "@/types/user";
 
 const navKeys = [
   "home",
@@ -35,7 +36,68 @@ const navHrefs: Record<(typeof navKeys)[number], string> = {
 export function Header({ dict }: { dict: Dictionary }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
+  // ----------------------------------------------------------------
+  // Synchronisation de la session utilisateur
+  // ----------------------------------------------------------------
+  useEffect(() => {
+    let active = true;
+
+    const syncSession = async () => {
+      const session = api.auth.currentSession();
+      if (!session?.access) {
+        if (active) setUser(null);
+        return;
+      }
+
+      if (session.user) {
+        if (active) setUser(session.user);
+        return;
+      }
+
+      try {
+        const currentUser = await api.auth.currentUser();
+        if (active) setUser(currentUser);
+      } catch {
+        api.auth.logout();
+        if (active) setUser(null);
+      }
+    };
+
+    void syncSession();
+    const unsubscribe = api.auth.onSessionChange(() => void syncSession());
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
+
+  // ----------------------------------------------------------------
+  // Fermeture automatique du menu mobile au changement de route
+  // ----------------------------------------------------------------
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // ----------------------------------------------------------------
+  // Verrouillage du scroll body quand le menu mobile est ouvert
+  // ----------------------------------------------------------------
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = mobileOpen ? "hidden" : originalOverflow;
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [mobileOpen]);
+
+  // ----------------------------------------------------------------
+  // Helpers
+  // ----------------------------------------------------------------
   const isActive = (href: string) => {
     if (href === "/") {
       return pathname === "/";
@@ -46,6 +108,11 @@ export function Header({ dict }: { dict: Dictionary }) {
 
   const closeMenu = () => {
     setMobileOpen(false);
+  };
+
+  const signOut = () => {
+    api.auth.logout();
+    closeMenu();
   };
 
   return (
@@ -70,7 +137,7 @@ export function Header({ dict }: { dict: Dictionary }) {
               priority
             />
 
-            <div className=" min-w-0 xs:block sm:block">
+            <div className="min-w-0">
               <span className="block truncate font-display text-sm font-semibold leading-tight text-royal sm:text-base">
                 Church of the Living God
               </span>
@@ -125,13 +192,33 @@ export function Header({ dict }: { dict: Dictionary }) {
               ACTIONS DESKTOP
           ============================================================ */}
           <div className="hidden shrink-0 items-center gap-2 lg:flex">
-            <Button
-              href="/login"
-              variant="secondary"
-              className="whitespace-nowrap px-3 py-2 text-xs xl:px-4"
-            >
-              {dict.nav.login}
-            </Button>
+            {user ? (
+              <>
+               
+                <Button
+                  href="/dashboard"
+                  variant="secondary"
+                  className="whitespace-nowrap px-3 py-2 text-xs xl:px-4"
+                >
+                  Mon espace
+                </Button>
+                {/* <button
+                  type="button"
+                  onClick={signOut}
+                  className="rounded-md px-3 py-2 text-xs font-semibold text-slate transition-colors hover:bg-royal-50 hover:text-royal"
+                >
+                  Déconnexion
+                </button> */}
+              </>
+            ) : (
+              <Button
+                href="/login"
+                variant="secondary"
+                className="whitespace-nowrap px-3 py-2 text-xs xl:px-4"
+              >
+                {dict.nav.login}
+              </Button>
+            )}
 
             <Button
               href="/dons"
@@ -148,11 +235,7 @@ export function Header({ dict }: { dict: Dictionary }) {
             type="button"
             onClick={() => setMobileOpen((value) => !value)}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-royal-100 bg-paper-light text-royal transition hover:bg-royal-50 lg:hidden"
-            aria-label={
-              mobileOpen
-                ? "Fermer le menu"
-                : "Ouvrir le menu"
-            }
+            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={mobileOpen}
             aria-controls="clg-mobile-menu"
           >
@@ -160,9 +243,7 @@ export function Header({ dict }: { dict: Dictionary }) {
               <span
                 className={[
                   "h-0.5 w-full rounded-full bg-current transition-all duration-300",
-                  mobileOpen
-                    ? "translate-y-2 rotate-45"
-                    : "",
+                  mobileOpen ? "translate-y-2 rotate-45" : "",
                 ].join(" ")}
               />
 
@@ -176,9 +257,7 @@ export function Header({ dict }: { dict: Dictionary }) {
               <span
                 className={[
                   "h-0.5 w-full rounded-full bg-current transition-all duration-300",
-                  mobileOpen
-                    ? "-translate-y-2 -rotate-45"
-                    : "",
+                  mobileOpen ? "-translate-y-2 -rotate-45" : "",
                 ].join(" ")}
               />
             </div>
@@ -194,13 +273,13 @@ export function Header({ dict }: { dict: Dictionary }) {
         className={[
           "overflow-hidden border-t border-royal-100 bg-paper-light transition-all duration-300 lg:hidden",
           mobileOpen
-            ? "max-h-[calc(100vh-64px)] opacity-100"
+            ? "max-h-[calc(100vh-64px)] opacity-100 sm:max-h-[calc(100vh-72px)]"
             : "pointer-events-none max-h-0 opacity-0",
         ].join(" ")}
       >
         <Container>
           <nav
-            className="max-h-[calc(100vh-64px)] overflow-y-auto py-3 sm:py-4"
+            className="max-h-[calc(100vh-64px)] overflow-y-auto py-3 sm:max-h-[calc(100vh-72px)] sm:py-4"
             aria-label="Navigation mobile"
           >
             <div className="grid grid-cols-1 gap-1">
@@ -238,14 +317,34 @@ export function Header({ dict }: { dict: Dictionary }) {
 
             {/* Mobile actions */}
             <div className="mt-3 grid grid-cols-1 gap-2 border-t border-royal-100 pt-3 sm:grid-cols-2">
-              <Button
-                href="/login"
-                variant="secondary"
-                onClick={closeMenu}
-                className="w-full py-2.5 text-xs"
-              >
-                {dict.nav.login}
-              </Button>
+              {user ? (
+                <>
+                  <Button
+                    href="/dashboard"
+                    variant="secondary"
+                    onClick={closeMenu}
+                    className="w-full py-2.5 text-xs"
+                  >
+                    Mon espace ({user.fullName})
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={signOut}
+                    className="w-full rounded-sm border border-royal-100 px-4 py-2.5 text-xs font-medium text-royal"
+                  >
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <Button
+                  href="/login"
+                  variant="secondary"
+                  onClick={closeMenu}
+                  className="w-full py-2.5 text-xs"
+                >
+                  {dict.nav.login}
+                </Button>
+              )}
 
               <Button
                 href="/dons"

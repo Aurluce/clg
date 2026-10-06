@@ -1,16 +1,46 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field, inputClassName } from "@/components/ui/Field";
+import { api } from "@/lib/api";
 
 export function LoginForm() {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
+  const [sessionName, setSessionName] = useState<string | null>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setFeedback(null);
+
+    const formData = new FormData(event.currentTarget);
+    try {
+      const session = await api.auth.login({
+        email: String(formData.get("email")),
+        password: String(formData.get("password")),
+      });
+      setSessionName(session.user?.fullName ?? session.user?.email ?? "Membre CLG");
+      setFeedback({ kind: "success", message: "Connexion réussie. Votre session est active dans cet onglet." });
+      router.push("/dashboard");
+    } catch (error) {
+      setFeedback({
+        kind: "error",
+        message: error instanceof Error ? error.message : "La connexion a échoué.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        alert("Authentification à connecter à l'API Django (JWT).");
-      }}
+      onSubmit={handleSubmit}
       className="relative overflow-hidden rounded-xl border border-royal-100 bg-paper-light p-8 shadow-md md:p-10"
     >
       <span
@@ -63,21 +93,27 @@ export function LoginForm() {
         </Field>
       </div>
 
-      <Button type="submit" variant="primary" className="mt-8 w-full">
-        Se connecter
+      <Button type="submit" variant="primary" disabled={isSubmitting} className="mt-8 w-full">
+        {isSubmitting ? "Connexion…" : "Se connecter"}
         <span aria-hidden="true">→</span>
       </Button>
+
+      {feedback && (
+        <p role="status" aria-live="polite" className={`mt-4 text-sm ${feedback.kind === "error" ? "text-crimson" : "text-green-700"}`}>
+          {feedback.message}
+        </p>
+      )}
 
 
         <div className="mt-4 text-center">
             <p className="font-body text-sm text-slate">
                 Pas encore de compte ?{" "}
-                <a
+                <Link
                     href="/inscription"
                     className="font-semibold text-royal transition-colors hover:text-gold"
                 >
                     Inscrivez-vous ici
-                </a>
+                </Link>
             </p>
         </div>
 
@@ -85,17 +121,31 @@ export function LoginForm() {
 
       <p className="mt-2 font-mono text-xs leading-relaxed text-slate-light">
         Mot de passe oublié ?{" "}
-        <a
+        <Link
           href="/mot-de-passe-oublie"
           className="font-semibold text-royal transition-colors hover:text-gold"
         >
           Réinitialisez-le ici
-        </a>
+        </Link>
       </p>
 
-      <p className="mt-6 text-center font-mono text-xs leading-relaxed text-slate-light">
-        Authentification à connecter à l'API Django (JWT).
-      </p>
+      {sessionName && (
+        <div className="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-center">
+          <p className="text-sm font-medium text-green-800">Session active : {sessionName}</p>
+          <button
+            type="button"
+            onClick={() => {
+              api.auth.logout();
+              setSessionName(null);
+              setFeedback(null);
+            }}
+            className="mt-2 text-sm font-semibold text-royal underline underline-offset-2"
+          >
+            Se déconnecter
+          </button>
+        </div>
+      )}
+
     </form>
   );
 }

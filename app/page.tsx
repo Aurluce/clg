@@ -9,9 +9,7 @@ import { WorldThread } from "@/components/ui/WorldThread";
 import { ConceptCard } from "@/components/ui/ConceptCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CTABand } from "@/components/ui/CTABand";
-import { chapels } from "@/lib/mock/content";
-
-const countries = new Set(chapels.map((c) => c.country)).size;
+import { api } from "@/lib/api";
 
 const exploreItems = [
   {
@@ -43,7 +41,17 @@ const exploreItems = [
 ];
 
 export default async function HomePage() {
-  const dict = await getDictionary();
+  const [dict, chapelResult] = await Promise.all([
+    getDictionary(),
+    api.content.chapels().then(
+      (data) => ({ data, unavailable: false }),
+      () => ({ data: [], unavailable: true }),
+    ),
+  ]);
+  const chapelCount = chapelResult.unavailable ? "—" : String(chapelResult.data.length);
+  const countryCount = chapelResult.unavailable
+    ? "—"
+    : String(new Set(chapelResult.data.map((chapel) => chapel.country)).size);
 
   return (
     <>
@@ -112,8 +120,8 @@ export default async function HomePage() {
         <Container className="relative pb-14 md:pb-20">
           <dl className="fade-up fade-up-3 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-royal-100 bg-royal-100 shadow-sm sm:grid-cols-3">
             {[
-              { value: `${chapels.length}`, label: "Chapelles à travers le monde" },
-              { value: `${countries}`, label: "Pays touchés par l'Évangile" },
+              { value: chapelCount, label: "Chapelles à travers le monde" },
+              { value: countryCount, label: "Pays touchés par l'Évangile" },
               { value: "1", label: "Message : recommencer avec Jésus" },
             ].map((stat) => (
               <div key={stat.label} className="bg-paper-light px-6 py-6 text-center sm:text-left">
