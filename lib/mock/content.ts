@@ -12,9 +12,9 @@ export const chapels: Chapel[] = [
 ];
 
 export const sermons: Sermon[] = [
-  { id: "s1", title: "L'appui et la colonne de la vérité", chapelSlug: "douala-centre", chapelName: "CLG Douala Centre", preacher: "Pasteur Jean Mbarga", date: "2026-08-10", format: "video" },
-  { id: "s2", title: "Recommencer avec Jésus", chapelSlug: "yaounde-nord", chapelName: "CLG Yaoundé ", preacher: "Pasteur Paul ", date: "2026-08-03", format: "audio" },
-  { id: "s3", title: "Marcher dans la vérité", chapelSlug: "bafoussam", chapelName: "CLG Bafoussam", preacher: "Pasteur Samuel ", date: "2026-07-27", format: "video" },
+  { id: "s1", slug: "appui-colonne-verite", title: "L'appui et la colonne de la vérité", description: "Un enseignement sur la foi et la vie chrétienne.", content: "", videoUrl: null, audioUrl: null, thumbnailUrl: null, chapelSlug: "douala-centre", chapelName: "CLG Douala Centre", preacher: "Pasteur Jean Mbarga", date: "2026-08-10", format: "video" },
+  { id: "s2", slug: "recommencer-avec-jesus", title: "Recommencer avec Jésus", description: "Un message d'espérance et de renouveau.", content: "", videoUrl: null, audioUrl: null, thumbnailUrl: null, chapelSlug: "yaounde-nord", chapelName: "CLG Yaoundé ", preacher: "Pasteur Paul ", date: "2026-08-03", format: "audio" },
+  { id: "s3", slug: "marcher-dans-la-verite", title: "Marcher dans la vérité", description: "Un enseignement pratique sur la vérité.", content: "", videoUrl: null, audioUrl: null, thumbnailUrl: null, chapelSlug: "bafoussam", chapelName: "CLG Bafoussam", preacher: "Pasteur Samuel ", date: "2026-07-27", format: "video" },
 ];
 
 export const testimonies: Testimony[] = [

@@ -1,0 +1,2 @@
+Dépendances : next, react, react-dom, tailwindcss, recharts, framer-motion, lucide-react.
+Le dossier est un module à intégrer dans votre application CLG existante. Les routes dans app/ correspondent aux sous-pages à déplacer sous le chemin de base dashboard/pastor_admin.

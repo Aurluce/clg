@@ -7,5 +7,17 @@ export interface AuthUser {
   email: string;
   systemRole: SystemRole;
   soulStatus?: SoulStatus;
-  chapelId?: string;
+  chapelId?: string | null;
+}
+
+export interface UserProfile extends AuthUser {
+  phone: string;
+  country: string;
+  city: string;
+  chapelName: string | null;
+  chapelSlug: string | null;
+  profilePhoto: string | null;
+  isVerified: boolean;
+  isApproved: boolean;
+  dateJoined: string;
 }

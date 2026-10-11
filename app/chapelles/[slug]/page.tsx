@@ -1,11 +1,16 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ChapelMapSection } from "@/components/content/ChapelMapSection";
 import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { CTABand } from "@/components/ui/CTABand";
-import { SermonCard } from "@/components/content/Cards";
-import { chapels, sermons } from "@/lib/mock/content";
+
+function readableSlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toLocaleUpperCase("fr-FR") + word.slice(1))
+    .join(" ");
+}
 
 export async function generateMetadata({
   params,
@@ -13,108 +18,38 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const chapel = chapels.find((c) => c.slug === slug);
+  const name = readableSlug(slug);
 
   return {
-    title: chapel ? `${chapel.name} — CLG` : "Chapelle — CLG",
-    description: chapel
-      ? `Découvrez la ${chapel.name} à ${chapel.city}, dirigée par ${chapel.pastorName}.`
-      : undefined,
+    title: `${name} — Chapelle CLG`,
+    description: `Carte, itinéraire, coordonnées et activités de la chapelle ${name}.`,
   };
 }
 
 export default async function ChapelPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const chapel = chapels.find((c) => c.slug === slug);
-  if (!chapel) notFound();
-
-  const chapelSermons = sermons.filter((s) => s.chapelSlug === slug);
-
-  const infos = [
-    { label: "Ville", value: `${chapel.city}, ${chapel.country}` },
-    { label: "Pasteur", value: chapel.pastorName },
-    { label: "Contact", value: chapel.contact },
-  ];
+  const chapelName = readableSlug(slug);
 
   return (
     <>
       <PageHero
-        eyebrow={`${chapel.country} — ${chapel.city}`}
-        title={chapel.name}
-        subtitle="Bienvenue dans notre chapelle : retrouvez ici nos prédications et nos activités locales."
+        eyebrow="Chapelle CLG"
+        title={chapelName}
+        subtitle="Retrouvez sa position exacte, ses coordonnées, ses activités et les indications pour vous y rendre."
       />
 
-      {/* Cartes d'information */}
-      <Section className="pb-0">
-        <dl className="grid gap-px overflow-hidden rounded-xl border border-royal-100 bg-royal-100 shadow-sm sm:grid-cols-3">
-          {infos.map((info) => (
-            <div key={info.label} className="bg-paper-light px-6 py-6">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.15em] text-slate-light">
-                {info.label}
-              </dt>
-              <dd className="mt-1.5 font-display text-base font-semibold text-royal">
-                {info.value}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </Section>
-
-      {/* Prédications */}
       <Section>
-        <SectionHeading
-          eyebrow="Prédications"
-          title="Prédications récentes"
-        />
-
-        {chapelSermons.length === 0 ? (
-          <div className="mt-8 rounded-xl border-2 border-dashed border-royal-100 bg-paper-light px-8 py-14 text-center">
-            <p className="font-display text-lg font-semibold text-royal">
-              Aucune prédication publiée pour l'instant
-            </p>
-
-            <p className="mx-auto mt-2 max-w-md font-body text-sm leading-relaxed text-slate">
-              Les prédications de cette chapelle apparaîtront ici dès leur publication par le
-              pasteur.
-            </p>
-          </div>
-        ) : (
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {chapelSermons.map((sermon) => (
-              <SermonCard key={sermon.id} sermon={sermon} />
-            ))}
-          </div>
-        )}
-      </Section>
-
-      {/* Activités */}
-      <Section className="border-t border-royal-100 bg-paper-light">
-        <SectionHeading
-          eyebrow="Vie locale"
-          title="Activités de la chapelle"
-          lead="Réunions de prière, visites, projets communautaires : suivez la vie de la chapelle au quotidien."
-        />
-
-        <div className="mt-8 rounded-xl border-2 border-dashed border-royal-100 bg-paper px-8 py-14 text-center">
-          <p className="font-display text-lg font-semibold text-royal">
-            Bientôt disponible
-          </p>
-
-          <p className="mx-auto mt-2 max-w-md font-body text-sm leading-relaxed text-slate">
-            Les activités locales seront publiées ici par le pasteur de la chapelle.
+        <div className="mb-7">
+          <Link href="/chapelles" className="text-sm font-semibold text-royal-700 hover:underline">
+            ← Toutes les chapelles
+          </Link>
+          <h2 className="mt-5 font-display text-2xl font-semibold text-royal">Carte et informations de la chapelle</h2>
+          <p className="mt-2 text-sm leading-6 text-slate">
+            La carte centre automatiquement cette chapelle. Autorisez la géolocalisation pour calculer votre itinéraire piéton.
           </p>
         </div>
+        <ChapelMapSection key={slug} initialSelectedSlug={slug} showChapelSelector={false} />
       </Section>
-
-      <CTABand
-        eyebrow="Vous êtes les bienvenus"
-        title={`Rejoignez-nous à la ${chapel.name.replace("CLG ", "")}`}
-        text={`Rendez-vous à ${chapel.city}. Contactez le pasteur ${chapel.pastorName.replace("Pasteur ", "")} pour plus d'informations.`}
-        primaryLabel="Voir toutes les chapelles"
-        primaryHref="/chapelles"
-        secondaryLabel="Nous contacter"
-        secondaryHref="/contact"
-      />
     </>
   );
 }

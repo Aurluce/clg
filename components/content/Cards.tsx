@@ -156,8 +156,8 @@ export function SermonCard({ sermon }: { sermon: Sermon }) {
             isVideo ? "bg-crimson-100 text-crimson-700" : "bg-royal-50 text-royal-700"
           )}
         >
-          {isVideo ? <IconPlay /> : <IconHeadphones />}
-          {isVideo ? "Vidéo" : "Audio"}
+          {isVideo ? <IconPlay /> : sermon.format === "audio" ? <IconHeadphones /> : null}
+          {isVideo ? "Vidéo" : sermon.format === "audio" ? "Audio" : "Message écrit"}
         </span>
 
         <span className="truncate font-mono text-[11px] uppercase tracking-[0.12em] text-slate-light">
@@ -189,7 +189,7 @@ export function SermonCard({ sermon }: { sermon: Sermon }) {
 
 export function TestimonyCard({ testimony }: { testimony: Testimony }) {
   return (
-    <Link href={`/temoignages/${testimony.id}`} className={cardLinkBase}>
+    <article className={cn(cardBase, "gap-4")}>
       <span
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold via-gold-300 to-gold opacity-90"
@@ -208,6 +208,20 @@ export function TestimonyCard({ testimony }: { testimony: Testimony }) {
         «&nbsp;{testimony.excerpt}&nbsp;»
       </p>
 
+      {testimony.format === "audio" && testimony.audioUrl && (
+        <audio className="w-full" controls preload="none" aria-label={`Écouter le témoignage de ${testimony.authorName}`}>
+          <source src={testimony.audioUrl} />
+          Votre navigateur ne prend pas en charge la lecture audio.
+        </audio>
+      )}
+
+      {testimony.format === "video" && testimony.videoUrl && (
+        <video className="aspect-video w-full rounded-lg bg-black object-contain" controls preload="metadata" aria-label={`Voir le témoignage de ${testimony.authorName}`}>
+          <source src={testimony.videoUrl} />
+          Votre navigateur ne prend pas en charge la lecture vidéo.
+        </video>
+      )}
+
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-royal-100/80 pt-4">
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-semibold text-royal">
@@ -219,11 +233,11 @@ export function TestimonyCard({ testimony }: { testimony: Testimony }) {
             </p>
           )}
         </div>
-        <span className={arrowClasses} aria-hidden="true">
-          <IconArrowRight />
-        </span>
+        <Link href={`/temoignages/${testimony.id}`} className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-royal-700 hover:text-crimson">
+          Lire <IconArrowRight />
+        </Link>
       </div>
-    </Link>
+    </article>
   );
 }
 

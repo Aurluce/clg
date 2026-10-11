@@ -14,15 +14,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import sys
+
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from django.views.static import serve as serve_media
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('config.api_urls')),
 ]
 
+# `runserver` is the local development server; serve uploaded files there even
+# when DEBUG is explicitly disabled. Production WSGI deployments must serve
+# MEDIA_ROOT through a dedicated media server/storage instead.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+elif len(sys.argv) > 1 and sys.argv[1] == "runserver":
+    urlpatterns += [
+        path("media/<path:path>", serve_media, {"document_root": settings.MEDIA_ROOT}),
+    ]

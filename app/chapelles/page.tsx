@@ -2,8 +2,7 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CTABand } from "@/components/ui/CTABand";
-import { ChapelCard } from "@/components/content/Cards";
-import { chapels } from "@/lib/mock/content";
+import { ChapelDirectory } from "@/components/content/ChapelDirectory";
 
 export const metadata = {
   title: "Chapelles — CLG",
@@ -22,15 +21,11 @@ export default function ChapelsPage() {
 
       <Section>
         <SectionHeading
-          eyebrow={`${chapels.length} chapelles`}
+          eyebrow="Nos implantations"
           title="Trouvez la chapelle la plus proche de vous"
         />
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {chapels.map((chapel) => (
-            <ChapelCard key={chapel.slug} chapel={chapel} />
-          ))}
-        </div>
+        <ChapelDirectory />
       </Section>
 
       <CTABand

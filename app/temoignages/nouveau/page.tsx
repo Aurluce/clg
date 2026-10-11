@@ -35,6 +35,7 @@ const formats = [
 
 export default function NewTestimonyPage() {
   const [format, setFormat] = useState<(typeof formats)[number]["value"]>("texte");
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<{ kind: "success" | "error"; message: string } | null>(null);
 
@@ -55,11 +56,13 @@ export default function NewTestimonyPage() {
             const form = e.currentTarget;
             const payload = new FormData(form);
             payload.set("format", format);
+            payload.set("isAnonymous", String(isAnonymous));
             try {
               await api.testimonies.create(payload);
               setFeedback({ kind: "success", message: "Votre témoignage a été envoyé pour validation." });
               form.reset();
               setFormat("texte");
+              setIsAnonymous(false);
             } catch (error) {
               setFeedback({
                 kind: "error",
@@ -118,17 +121,23 @@ export default function NewTestimonyPage() {
           </fieldset>
 
           <div className="mt-8">
-            <Field label="Nom complet" required>
+            <Field label="Nom complet" required={!isAnonymous} hint={isAnonymous ? "Votre nom ne sera pas associé au témoignage." : undefined}>
               <input
                 type="text"
                 name="name"
-                required
+                required={!isAnonymous}
+                disabled={isAnonymous}
                 autoComplete="name"
                 placeholder="Votre nom"
                 className={inputClassName}
               />
             </Field>
           </div>
+
+          <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border border-royal-100 bg-white p-4 text-sm text-charcoal">
+            <input type="checkbox" checked={isAnonymous} onChange={(event) => setIsAnonymous(event.target.checked)} className="mt-0.5 h-4 w-4 accent-royal" />
+            <span><span className="font-semibold">Publier anonymement</span><span className="mt-1 block text-xs leading-5 text-slate">Votre nom ne sera pas affiché et ne sera pas associé à ce témoignage.</span></span>
+          </label>
 
           <div className="mt-6">
             <Field label="Ma chapelle" hint="Facultatif — la chapelle CLG dont vous êtes membre.">

@@ -5,6 +5,7 @@ import { getDictionary } from "@/i18n/config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Marquee } from "@/components/ui/Marquee";
+import { RouteShell } from "@/components/layout/RouteShell";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -40,10 +41,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable}`}
     >
       <body className="min-h-full flex flex-col bg-paper text-charcoal font-body antialiased">
-        <Marquee />
-        <Header dict={dict} />
-        <main className="flex-1">{children}</main>
-        <Footer dict={dict} />
+        <RouteShell
+          header={<><Marquee /><Header dict={dict} /></>}
+          footer={<Footer dict={dict} />}
+        >
+          {children}
+        </RouteShell>
       </body>
     </html>
   );

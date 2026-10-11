@@ -1,18 +1,24 @@
 import type {
   Book,
   Chapel,
+  ChapelDetail,
   ChoirSong,
+  ChurchPageContent,
   Convention,
   EvangelizationCampaign,
+  MemberChapel,
   Sermon,
   Testimony,
+  TestimonyComment,
 } from "@/types/content";
-import type { AuthUser } from "@/types/user";
+import type { AuthUser, UserProfile } from "@/types/user";
 
 const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   (process.env.NODE_ENV === "development" ? "http://localhost:8000" : "")
 ).replace(/\/+$/, "");
+
+export const ADMIN_DASHBOARD_URL = `${API_BASE_URL}/admin/`;
 
 export class ApiError extends Error {
   constructor(
@@ -28,12 +34,25 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Accept", "application/json");
   const accessToken = getAccessToken();
-  const isPublicAuthRequest = [
+  const isPublicRequest = [
     "/api/auth/token/",
     "/api/auth/token/refresh/",
     "/api/auth/register/",
+    "/api/church-page/",
+    "/api/chapels/",
+    "/api/sermons/",
+    "/api/testimonies/",
+    "/api/conventions/",
+    "/api/books/",
+    "/api/campaigns/",
+    "/api/contact/",
+    "/api/donations/",
   ].includes(path);
-  if (accessToken && !isPublicAuthRequest && !headers.has("Authorization")) {
+  const isPublicChapelDetail = /^\/api\/chapels\/[^/]+\/$/.test(path);
+  const isPublicSermonDetail = /^\/api\/sermons\/[^/]+\/$/.test(path);
+  const isPublicTestimonyDetail = /^\/api\/testimonies\/\d+\/$/.test(path);
+  const isPublicTestimonyCommentsRead = /^\/api\/testimonies\/\d+\/comments\/$/.test(path) && init.method !== "POST";
+  if (accessToken && !isPublicRequest && !isPublicChapelDetail && !isPublicSermonDetail && !isPublicTestimonyDetail && !isPublicTestimonyCommentsRead && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
@@ -142,6 +161,111 @@ export interface DonationPayload {
   currency: "XAF";
 }
 
+export interface DashboardActivity {
+  kind: "testimony" | "convention" | "donation";
+  title: string;
+  description: string;
+  date: string;
+  status: string;
+  href: string;
+}
+
+export interface MemberDashboardData {
+  member: UserProfile;
+  stats: {
+    testimonies: number;
+    pendingTestimonies: number;
+    conventionRegistrations: number;
+    successfulDonations: number;
+    successfulDonationTotal: string;
+    publishedSermons: number;
+    activeChapels: number;
+    upcomingConventions: number;
+  };
+  recentActivity: DashboardActivity[];
+  sermons: Sermon[];
+  conventions: Convention[];
+  events: EvangelizationCampaign[];
+}
+
+export interface PastorMemberRecord {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  country: string;
+  city: string;
+  churchStatus: string;
+  chapelId: string | null;
+  chapelName: string | null;
+  dateJoined: string;
+  isActive: boolean;
+  isVerified: boolean;
+  isApproved: boolean;
+}
+
+export interface PastorActivityRecord {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  chapelName: string;
+  created_at: string;
+}
+
+export interface PastorTestimonyRecord {
+  id: number;
+  title: string;
+  authorName: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  createdAt: string;
+  content: string;
+}
+
+export interface PastorDashboardOverview {
+  pastor: { fullName: string; email: string };
+  chapel: { name: string; city: string; country: string } | null;
+  stats: {
+    activeMembers: number;
+    newMembersThisMonth: number;
+    memberGrowthPercent: number;
+    publishedSermons: number;
+    pendingTestimonies: number;
+    upcomingActivities: number;
+    donationsThisMonth: string;
+    donationCountThisMonth: number;
+  };
+  monthly: { month: string; members: number; donations: string }[];
+  nextSunday: {
+    date: string;
+    activity: PastorActivityRecord | null;
+  };
+  upcomingActivities: PastorActivityRecord[];
+}
+
+export interface PastorSermonRecord extends Sermon {
+  preacherId: number;
+  isPublished: boolean;
+  mediaType: "TEXT" | "AUDIO" | "VIDEO";
+}
+
+export interface PastorPreacherChoice {
+  id: number;
+  fullName: string;
+  email: string;
+  churchStatus: string;
+  systemRole: string;
+}
+
+export interface PastorSermonChapelChoice {
+  id: number;
+  slug: string;
+  name: string;
+  city: string;
+  country: string;
+}
+
 export const api = {
   auth: {
     login: async (payload: { email: string; password: string }) => {
@@ -176,10 +300,66 @@ export const api = {
       }
     },
     currentUser: () => request<AuthUser>("/api/auth/me/"),
+    dashboard: () => request<MemberDashboardData>("/api/auth/dashboard/"),
+    myChapel: () => request<{ chapel: MemberChapel | null }>("/api/auth/my-chapel/"),
+    profile: () => request<UserProfile>("/api/auth/profile/"),
+    updateProfile: (payload: FormData) =>
+      request<UserProfile>("/api/auth/profile/", { method: "PATCH", body: payload }),
+    changePassword: (payload: { currentPassword: string; newPassword: string }) =>
+      postJson<{ message?: string }>("/api/auth/password/", payload),
+    updateCachedUser: (user: AuthUser) => {
+      if (typeof window === "undefined") return;
+      const session = api.auth.currentSession();
+      if (!session) return;
+      window.sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify({ ...session, user }));
+      notifyAuthStateChanged();
+    },
   },
   contact: {
     send: (payload: ContactPayload) =>
       postJson<{ message?: string }>("/api/contact/", payload),
+  },
+  pastor: {
+    dashboard: () => request<PastorDashboardOverview>("/api/pastor/dashboard/"),
+    sermonChapels: () => request<PastorSermonChapelChoice[]>("/api/pastor/sermons/options/chapels/"),
+    sermonPreachers: (chapelSlug: string) =>
+      request<PastorPreacherChoice[]>(`/api/pastor/sermons/options/chapels/${encodeURIComponent(chapelSlug)}/preachers/`),
+    sermons: () => request<PastorSermonRecord[]>("/api/pastor/sermons/"),
+    createSermon: (payload: FormData) =>
+      request<PastorSermonRecord>("/api/pastor/sermons/", { method: "POST", body: payload }),
+    updateSermon: (id: string, payload: FormData) =>
+      request<PastorSermonRecord>(`/api/pastor/sermons/${encodeURIComponent(id)}/`, { method: "PATCH", body: payload }),
+    deleteSermon: (id: string) =>
+      request<void>(`/api/pastor/sermons/${encodeURIComponent(id)}/`, { method: "DELETE" }),
+    members: () => request<PastorMemberRecord[]>("/api/pastor/members/"),
+    createMember: (payload: Record<string, string>) =>
+      postJson<PastorMemberRecord>("/api/pastor/members/", payload),
+    updateMember: (id: string, payload: Record<string, string | boolean>) =>
+      request<PastorMemberRecord>(`/api/pastor/members/${encodeURIComponent(id)}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+    deactivateMember: (id: string) =>
+      request<void>(`/api/pastor/members/${encodeURIComponent(id)}/`, { method: "DELETE" }),
+    activities: () => request<PastorActivityRecord[]>("/api/pastor/activities/"),
+    createActivity: (payload: Record<string, string>) =>
+      postJson<PastorActivityRecord>("/api/pastor/activities/", payload),
+    updateActivity: (id: number, payload: Record<string, string>) =>
+      request<PastorActivityRecord>(`/api/pastor/activities/${id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }),
+    deleteActivity: (id: number) =>
+      request<void>(`/api/pastor/activities/${id}/`, { method: "DELETE" }),
+    testimonies: () => request<PastorTestimonyRecord[]>("/api/pastor/testimonies/"),
+    moderateTestimony: (id: number, status: PastorTestimonyRecord["status"]) =>
+      request<{ id: number; status: PastorTestimonyRecord["status"] }>(`/api/pastor/testimonies/${id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      }),
   },
   conventions: {
     register: (slug: string, payload: ConventionRegistrationPayload) =>
@@ -189,19 +369,36 @@ export const api = {
       ),
   },
   testimonies: {
+    list: (filters: { format?: string; chapel?: string; q?: string } = {}) => {
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.set(key, value);
+      });
+      const query = params.toString();
+      return request<Testimony[]>(`/api/testimonies/${query ? `?${query}` : ""}`);
+    },
+    get: (id: string) => request<Testimony>(`/api/testimonies/${encodeURIComponent(id)}/`),
     create: (payload: FormData) =>
       request<{ message?: string }>("/api/testimonies/", {
         method: "POST",
         body: payload,
       }),
+    comments: (id: string) => request<TestimonyComment[]>(`/api/testimonies/${encodeURIComponent(id)}/comments/`),
+    addComment: (id: string, content: string) =>
+      postJson<{ message?: string }>(`/api/testimonies/${encodeURIComponent(id)}/comments/`, { content }),
   },
   donations: {
     create: (payload: DonationPayload) =>
       postJson<{ paymentUrl?: string; message?: string }>("/api/donations/", payload),
   },
   content: {
+    churchPage: () => request<ChurchPageContent>("/api/church-page/"),
     chapels: () => request<Chapel[]>("/api/chapels/"),
+    chapel: (slug: string) =>
+      request<ChapelDetail>(`/api/chapels/${encodeURIComponent(slug)}/`),
     sermons: () => request<Sermon[]>("/api/sermons/"),
+    sermon: (idOrSlug: string) =>
+      request<Sermon>(`/api/sermons/${encodeURIComponent(idOrSlug)}/`),
     testimonies: () => request<Testimony[]>("/api/testimonies/"),
     conventions: () => request<Convention[]>("/api/conventions/"),
     books: () => request<Book[]>("/api/books/"),
