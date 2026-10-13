@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import MyTestimony from "./FormTem2";
-import { useState } from "react";
 const TEMOIGNAGES = [
   {
     id: 1,
@@ -65,9 +63,6 @@ const TEMOIGNAGES = [
 ];
 
 export default function TemoignagesPage() {
-
-  const [open, setOpen] = useState(false)
-  
   return (
     <section className="w-full min-h-screen bg-[#F3F5FA] px-4 py-8 font-sans sm:px-6 lg:px-12">
       {/* En-tête */}
@@ -80,8 +75,8 @@ export default function TemoignagesPage() {
           Des vies transformées, racontées par ceux qui les ont vécues. Touchez un titre pour lire le témoignage complet.
         </p>
       </div>
-       <Link to="formTemoignage"  className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
-       flex items-center text-center  text-xs font-medium text-white" onClick={() => setOpen(true)}>
+      <Link to="/formTemoignage"  className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
+       flex items-center text-center  text-xs font-medium text-white">
               Enregistrer votre temoignage 
             </Link>
            

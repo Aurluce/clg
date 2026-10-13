@@ -9,7 +9,7 @@ import VoirTem from "./Temoignage/voir-tem";
 import CLGPage from "./convention/CLGPage";
 import FormTem from "./Temoignage/FormTem";
 import FormPredic from "./predication/FormPredic";
-import DashboardTem from "./Temoignage/DashboardTem";
+import DashboardTestimony from "./Temoignage/TemDashboard";
 import PredicationDashboard from "./predication/PredicationDashboard";
 import PredicationsPage from "./predication/PredicationsPage";
 import VoirPredic from "./predication/voir-predic";
@@ -32,7 +32,7 @@ export default function App(){
     <Route path="convention" element={<CLGPage />} />
     <Route path="formTemoignage" element={<FormTem />} />
     <Route path="formPredication" element={<FormPredic />} />
-    <Route path="dashBoard-Temoignage" element={<DashboardTem />} />
+    <Route path="dashBoard-Temoignage" element={<DashboardTestimony />} />
     <Route path="dashboard-Predication" element={<PredicationDashboard />} />
     <Route path="PredicationsPage" element={<PredicationsPage />} />
     <Route path="voirPredication" element={<VoirPredic />} />

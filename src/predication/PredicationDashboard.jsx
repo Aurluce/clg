@@ -104,6 +104,7 @@ function DashboardHeader({ utilisateur, infosEspace }) {
       </h2>
 
       <div className="flex gap-[30px] mb-3">
+        <div className="flex gap-5">
         <p className="text-[15px] m-0">
           <strong>{infosEspace.titre}</strong>
         </p>
@@ -113,6 +114,15 @@ function DashboardHeader({ utilisateur, infosEspace }) {
             {infosEspace.nombreInscrit}
           </span>
         </p>
+         <div className="ml-8">
+          <label htmlFor="" className="font-semibold text-slate-600 mb-1">Pays</label>
+          <select name="" id="" className="border border-slate-300 rounded-md px-2 py-1 text-sm w-full">
+            <option value="cameroun">cameroun</option>
+            <option value="coteDivoire">cote d'ivoire</option>
+            <option value="france">france</option>
+          </select>
+        </div>
+        </div>
       </div>
 
       {utilisateur && <p className="m-0 mb-2">Bonjour {utilisateur.email}</p>}

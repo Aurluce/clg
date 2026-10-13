@@ -6,7 +6,7 @@ const MOIS = [
 ];
 
 const inputClass =
-  "w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 " +
+  "w-full h-11 rounded-md border border-slate-300 bg-white px-3 text-sm md:text-lg text-slate-900 " +
   "focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200";
 
 const selectClass =
@@ -82,7 +82,7 @@ export default function FormPredic() {
   const annees = Array.from({ length: 80 }, (_, i) => new Date().getFullYear() - i);
 
   return (
-    <div className="min-h-screen bg-slate-200/70 px-4 py-4 font-sans">
+    <div className="min-h-screen bg-slate-200/70 px-4 py-4 font-sans text-base sm:text-lg">
       <div className="mx-auto max-w-3xl overflow-hidden rounded-md bg-white shadow-md">
         {/* En-tête */}
         <header className="border-b border-slate-200 px-8 pb-6 pt-10 sm:px-14">
@@ -94,7 +94,7 @@ export default function FormPredic() {
           </p>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-10 px-8 pb-12 pt-10 sm:px-14">
+        <form onSubmit={handleSubmit} className="space-y-10 px-8 pb-12 pt-10 sm:px-14 ">
           {/* Nom complet */}
           <fieldset>
             <legend className="mb-3 text-base text-slate-700">Nom complet</legend>

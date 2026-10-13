@@ -307,12 +307,14 @@ function TemoignageModal({ info, onClose }) {
           &times;
         </button>
 
-        <h3 className="text-lg font-bold text-[#0d47a1] mb-1">{info.titreTem}</h3>
+        <h3 className="text-lg font-bold text-[#0d47a1] mb-1">Modifier les informations</h3>
         <p className="text-xs text-slate-500 mb-4">
           {info.nom} {info.prenom} — {info.dateTem}
         </p>
 
-        <p className="text-slate-700 text-sm whitespace-pre-wrap">{info.temoignage}</p>
+        <p className="text-slate-700 text-sm whitespace-pre-wrap">
+       {info.temoignage}
+        </p>
       </div>
     </div>
   );
@@ -322,7 +324,7 @@ function TemoignageModal({ info, onClose }) {
 /*  Composant principal                                                */
 /* ------------------------------------------------------------------ */
 
-export default function RecruiterDashboard3() {
+export default function DashboardTestimony() {
   // Candidat dont le témoignage est actuellement affiché dans la modale
   // (null = modale fermée)
   const [temoignageOuvert, setTemoignageOuvert] = useState(null);

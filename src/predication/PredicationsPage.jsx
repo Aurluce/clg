@@ -82,8 +82,8 @@ export default function PredicationsPage() {
           Les enseignements publiés en texte, audio ou vidéo. Touchez un titre pour lire ou écouter le message complet.
         </p>
       </div>
-      <Link to="formPredication" className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
-       flex items-center text-center  text-xs font-medium text-white" onClick={() => setPage("inscription")}>
+      <Link to="/formPredication" className="rounded-xl h-[50px] bg-indigo-600 p-5 font-bold
+       flex items-center text-center  text-xs font-medium text-white" >
               Enregistrer une predication 
             </Link>
       </div>
@@ -120,7 +120,7 @@ export default function PredicationsPage() {
             <p className="text-[#68708C] text-[11px] font-normal">
               {item.subtitle} · {item.date}
             </p>
-    <Route path="voirPredication" element={<VoirPredic />} />
+   
             <Link to="/voirPredication" className="bg-blue-600 text-white p-3 rounded">Voir</Link>
             </div>
           </div>

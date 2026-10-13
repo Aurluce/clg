@@ -16,7 +16,7 @@ import CLGPage from './convention/CLGPage.jsx'
 import FormTem from './Temoignage/FormTem.jsx'
 import FormPredic from './predication/FormPredic.jsx'
 import RecruiterDashboard from './RecruiterDashboard.jsx'
-import RecruiterDashboard3 from './Temoignage/TemDashboard.jsx'
+import DashboardTestimony from './Temoignage/TemDashboard.jsx'
 import PredicationDashboard from './predication/PredicationDashboard.jsx'
 import TemPredic from './Temoignage/tem-predic.jsx'
 import TemoignagesPage from './Temoignage/TemoignagesPage.jsx'
@@ -24,11 +24,17 @@ import MyTestimony from './Temoignage/FormTem2.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import VoirTem from './Temoignage/voir-tem.jsx'
 import Acceuil from './Acceuil.jsx'
+import DashboardAuth from './authentification/DashboardAuth.jsx'
+
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+  <DashboardTestimony />
+  <DashboardAuth />
    <BrowserRouter>
    <Entete></Entete>
+   
     <App />
     </BrowserRouter>
    
