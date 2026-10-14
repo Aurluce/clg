@@ -2,7 +2,7 @@ import { useState } from "react"
 import Logo from "./logo"
 import { Link } from "react-router-dom"
 import { Menu, X, Home, BookOpen, MessageSquare, Church, Calendar, HandHeart, Music, Book, } from "lucide-react"
-
+import UnderlineHover from "./UnderlineHover"
 
 export default function Entete({ setPage }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -79,14 +79,15 @@ export default function Entete({ setPage }) {
             <span className="font-bold text-base tracking-wide text-indigo-600">CLG</span>
           </div>
           <div className="flex gap-2 justify-end font-semibold">
-            <Link to="/">Accueil</Link>
-            <Link to="/PredicationsPage">Prédications</Link>
-            <Link to="/temoignages">Témoignages</Link>
-            <Link to="/eglisesCLG">Chapelles</Link>
-            <Link to="/convention">Conventions</Link>
-            <div>Dons</div>
-            <div>Chant</div>
-            <div>Livre</div>
+            <UnderlineHover><Link to="/">Accueil</Link></UnderlineHover>
+            <UnderlineHover><Link to="/PredicationsPage">Prédications</Link></UnderlineHover>
+            
+            <UnderlineHover><Link to="/temoignages">Témoignages</Link></UnderlineHover>
+           <UnderlineHover> <Link to="/eglisesCLG">Chapelles</Link></UnderlineHover>
+            <UnderlineHover><Link to="/convention">Conventions</Link></UnderlineHover>
+            <UnderlineHover><div>Dons</div></UnderlineHover>
+            <UnderlineHover><div>Chant</div></UnderlineHover>
+            <UnderlineHover><div>Livre</div></UnderlineHover>
             <div className="flex gap-2">
               <Link to="/connexion" className="px-4 py-1.5 text-xs font-medium text-white bg-red-600 border border-white/20 rounded-full hover:bg-red-400 transition-all">
                 Connexion

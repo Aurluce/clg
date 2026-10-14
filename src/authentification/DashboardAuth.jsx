@@ -130,7 +130,7 @@ function DashboardHeader({ utilisateur, myField }) {
 
 // Boutons texte (sans icône) affichés dans la cellule "Opération" de
 // chaque ligne. À brancher plus tard sur les routes Laravel valider/supprimer.
-function OperationButtons({ info,onOpenModificate }) {
+function OperationButtons({ info,onOpenModificate, onDelete }) {
 
   
 
@@ -143,7 +143,7 @@ function OperationButtons({ info,onOpenModificate }) {
       <button type="button" onClick={()=> onOpenModificate(info)} className="op-btn op-btn-valider">
         Modifier
       </button>
-      <button type="button" onClick={handleSupprimer} className="op-btn op-btn-supprimer">
+      <button type="button" onClick={()=> onDelete(info)} className="op-btn op-btn-supprimer">
         Supprimer
       </button>
     </div>
@@ -263,11 +263,14 @@ function Modificate({ info, onClose,onSave }) {
     </div>
   );
 }
+
+
+
 // Affiche la valeur d'une cellule selon la colonne. "temoignage" ouvre
 // désormais un menu contextuel (modale) au clic via onOpenTemoignage.
-function CellValue({ colKey, info, onOpenModificate }) {
+function CellValue({ colKey, info, onOpenModificate, onDelete }) {
   if (colKey === "operation") {
-    return <OperationButtons info={info} onOpenModificate={onOpenModificate} />;
+    return <OperationButtons info={info} onOpenModificate={onOpenModificate} onDelete={onDelete} />;
   }
   if (colKey === "id") {
     return <span className="font-bold text-slate-500">{info.id}</span>;
@@ -311,7 +314,7 @@ function CellValue({ colKey, info, onOpenModificate }) {
   return <span className="text-slate-700">{info[colKey]}</span>;
 }
 
-function CandidatesTable({ candidats, colonnes, onOpenModificate }) {
+function CandidatesTable({ candidats, colonnes, onOpenModificate, onDelete }) {
   return (
     // 1) "overflow-x-auto" active le défilement horizontal DÈS QUE le
     //    contenu dépasse la largeur du conteneur.
@@ -353,7 +356,7 @@ function CandidatesTable({ candidats, colonnes, onOpenModificate }) {
                       col.key === "operation" ? "w-48 max-[900px]:w-20 max-[900px]:px-2" : ""
                     }`}
                   >
-                <CellValue colKey={col.key} info={info} onOpenModificate={onOpenModificate} />
+                <CellValue colKey={col.key} info={info} onOpenModificate={onOpenModificate} onDelete={onDelete} />
                    
                   </td>
                 ))}
@@ -415,6 +418,13 @@ export default function DashboardAuth() {
     setListeCandidats(
       listeCandidats.map((c) => (c.id === updated.id? updated : c))
     )
+  }
+
+    const handleDelete = (info) => {
+    const ok = window.confirm(`Supprimer ${info.nom} ${info.prenom}`)
+    if(!ok) return;
+
+    setListeCandidats(listeCandidats.filter((c) => c.id !==info.id))
     setModificateOuvert(null);
   }
 
@@ -478,12 +488,13 @@ export default function DashboardAuth() {
       `}</style>
 
       <main className="max-w-6xl mx-auto my-[90px] bg-white p-10 rounded-[17px] border border-slate-200 shadow-[0_15px_40px_rgba(15,23,42,0.04)]">
-        <DashboardHeader utilisateur={utilisateur} myField={myField} />
+        <DashboardHeader utilisateur={utilisateur} myField={{...myField,nombreInscrit:listeCandidats.length}} />
         
           <CandidatesTable
     candidats={listeCandidats}
     colonnes={colonnes}
     onOpenModificate={setModificateOuvert}
+    onDelete={handleDelete}
   />
 
         <SaveButton onClick={handleAdd} />
